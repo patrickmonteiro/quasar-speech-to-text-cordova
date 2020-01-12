@@ -1,6 +1,15 @@
 # Quasar Speech to Text Cordova (quasar-speech-to-text-cordova)
 
-A Quasar Framework app
+This app allows you to have a "speech" of a text, and allows you to capture a "speech" and convert it to text.
+
+## Cordova Mode
+```bash
+quasar dev -m cordova -T android
+```
+In cordova mode [cordova-plugin-tts](https://www.npmjs.com/package/cordova-plugin-tts) is used.
+
+And also [cordova-diagnostic-plugin](https://github.com/dpa99c/cordova-diagnostic-plugin) to enable permissions.
+
 
 ## Install the dependencies
 ```bash
@@ -11,16 +20,3 @@ npm install
 ```bash
 quasar dev
 ```
-
-### Lint the files
-```bash
-npm run lint
-```
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
