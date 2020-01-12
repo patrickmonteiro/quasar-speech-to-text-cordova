@@ -1,7 +1,7 @@
 <template>
   <q-page class="container">
     <div class="row justify-center q-col-gutter-sm">
-      <img class="col-8" alt="Quasar logo" src="~assets/quasar-logo-full.svg">
+      <img class="col-xs-8 col-md-4" alt="Quasar logo" src="~assets/quasar-logo-full.svg">
       <q-input class="col-10" outlined disable v-model="name" label="Name" />
     </div>
     <q-page-sticky position="bottom-right" :offset="[18, 58]">
