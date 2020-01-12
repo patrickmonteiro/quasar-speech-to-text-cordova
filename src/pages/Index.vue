@@ -32,7 +32,7 @@ export default {
         })
     },
     finalStep () {
-      this.$speechTalk('Thank you for using Quasar.')
+      this.$speechTalk(`Thank you for using Quasar ${this.name}`)
     },
     setName (name) {
       this.name = name

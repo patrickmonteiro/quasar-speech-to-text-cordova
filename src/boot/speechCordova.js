@@ -1,32 +1,50 @@
-import { Loading, QSpinnerAudio, QSpinnerBars } from 'quasar'
+import { Loading, QSpinnerAudio, QSpinnerBars, Platform } from 'quasar'
 export default async ({ Vue }) => {
+  const lang = 'en-US'
   Vue.prototype.$speechTalk = (text) => {
-    console.log('Status microfone', cordova.plugins.diagnostic.permissionStatus.GRANTED)
     return new Promise((resolve, reject) => {
-      cordova.plugins.diagnostic.requestMicrophoneAuthorization(function (status) {
-        if (status === cordova.plugins.diagnostic.permissionStatus.GRANTED) {
-          Loading.show({
-            delay: 0,
-            spinner: QSpinnerAudio, // ms,
-            backgroundColor: 'primary'
-          })
-          window.TTS.speak({
-            text: text,
-            locale: 'en-US',
-            rate: 0.60
-          }, () => {
-            Loading.hide()
-            setTimeout(() => {
-              resolve(true)
-            }, 400)
-          }, (reason) => {
-            reject(reason)
-          })
-        }
-      }, function (error) {
-        reject(error)
-        console.error(error)
-      })
+      if (Platform.is.cordova) {
+        cordova.plugins.diagnostic.requestMicrophoneAuthorization(function (status) {
+          if (status === cordova.plugins.diagnostic.permissionStatus.GRANTED) {
+            Loading.show({
+              delay: 0,
+              spinner: QSpinnerAudio, // ms,
+              backgroundColor: 'primary'
+            })
+            window.TTS.speak({
+              text: text,
+              locale: lang,
+              rate: 0.60
+            }, () => {
+              Loading.hide()
+              setTimeout(() => {
+                resolve(true)
+              }, 400)
+            }, (reason) => {
+              reject(reason)
+            })
+          }
+        }, function (error) {
+          reject(error)
+          console.error(error)
+        })
+      } else {
+        let speech = new SpeechSynthesisUtterance()
+        // Set the text and voice attributes.
+        speech.lang = lang
+        speech.text = text
+        speech.volume = 1
+        speech.rate = 1
+        speech.pitch = 1
+        setTimeout(() => {
+          window.speechSynthesis.speak(speech)
+        }, 300)
+
+        speech.addEventListener('end', () => {
+          Loading.hide()
+          resolve(true)
+        })
+      }
     })
   }
   Vue.prototype.$speechToText = () => {
@@ -39,10 +57,10 @@ export default async ({ Vue }) => {
         Loading.show({
           spinner: QSpinnerBars, // ms,
           backgroundColor: 'primary',
-          message: 'Aguardando áudio',
+          message: 'Awaiting Audio',
           messageColor: 'white'
         })
-        recognition.lang = 'en-US' // this.voiceSelect
+        recognition.lang = lang // this.voiceSelect
         recognition.start()
       }, 400)
 
